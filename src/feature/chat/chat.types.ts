@@ -1,3 +1,4 @@
+import { IAttatchment } from "../attatchment/attatchment.types";
 import { IUser } from "../auth/auth.types";
 
 export interface IConversationResponse {
@@ -22,7 +23,7 @@ export interface ILastMessage {
   text: string;
   unreadFor: string[];
   sender: string;
-  images: string[];
+  images: IAttatchment[];
   createdAt: string;
   updatedAt: string;
 }
@@ -60,7 +61,7 @@ export interface IMessage {
   };
   unsent: boolean;
   timestamp: string;
-  images: [];
+  images: IAttatchment[];
   createdAt: string;
   updatedAt: string;
 }

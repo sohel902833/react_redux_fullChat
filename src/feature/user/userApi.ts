@@ -25,6 +25,17 @@ export const userApi = apiSlice.injectEndpoints({
         method: "PUT",
       }),
     }),
+    subscribeToPushNotification: builder.mutation<any, any>({
+      query: (subscription) => ({
+        url: `/user/subscribe-notification`,
+        method: "PUT",
+        body: subscription,
+      }),
+    }),
   }),
 });
-export const { useGetUsersQuery, useChangeActiveStatusMutation } = userApi;
+export const {
+  useGetUsersQuery,
+  useChangeActiveStatusMutation,
+  useSubscribeToPushNotificationMutation,
+} = userApi;

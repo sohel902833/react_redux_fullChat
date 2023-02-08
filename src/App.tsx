@@ -9,8 +9,10 @@ import PublicRoute from "./components/util/PublicRoute";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import ChatBody from "./components/chat/ChatBody";
 import { useUserOnlineStatus } from "./hooks/useUserOnlineStatus";
+import usePushNotification from "./hooks/usePushNotification";
 function App() {
   const {} = useUserOnlineStatus();
+  const data = usePushNotification();
   return (
     <Router>
       <Routes>

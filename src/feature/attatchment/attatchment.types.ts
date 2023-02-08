@@ -8,6 +8,8 @@ export interface IAttatchmentResponse {
 }
 
 export interface IAttatchment {
+  _id?: string;
   uri: string;
   fileName: string;
+  url?: string;
 }

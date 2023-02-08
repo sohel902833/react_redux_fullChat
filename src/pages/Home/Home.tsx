@@ -8,9 +8,6 @@ import DeleteConversationModal from "../../components/home/DeleteConversationMod
 import LogoutModal from "../../components/home/LogoutModal";
 import "./chat.css";
 
-const getRandomNumber = (min: number, max: number) => {
-  return Math.random() * (max - min) + min;
-};
 const Home = () => {
   const [createChatModal, setCreateChatModal] = React.useState<boolean>(false);
   const [createGroupModal, setCreateGroupModal] =

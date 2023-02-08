@@ -1,10 +1,8 @@
-import { current } from "@reduxjs/toolkit";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { apiSlice } from "../../feature/api/apiSlice";
 import { IAuth } from "../../feature/auth/authSlice";
-import { IConversationResponse } from "../../feature/chat/chat.types";
+import { IMessage } from "../../feature/chat/chat.types";
 import { useGetSingleConversationQuery } from "../../feature/chat/chatApi";
 import { setActiveConversation } from "../../feature/container/containerSlice";
 import ChatHead from "./ChatHead";
@@ -15,6 +13,7 @@ import MessageList from "./MessageList";
 const ChatBody = () => {
   const { conversationId } = useParams();
   const { user } = useSelector((state: { auth: IAuth }) => state.auth);
+  const [repliedMessage, setRepliedMessage] = useState<IMessage | null>(null);
   const { data, isLoading } = useGetSingleConversationQuery(
     conversationId as string
   );
@@ -22,16 +21,6 @@ const ChatBody = () => {
 
   useEffect(() => {
     dispatch(setActiveConversation(conversationId ? conversationId : ""));
-    // dispatch(
-    //   apiSlice.util.updateQueryData(
-    //     "getConversations" as never,
-    //     undefined as never,
-    //     (draft: IConversationResponse) => {
-    //       draft.conversations = [...draft.conversations];
-    //       console.log(current(draft));
-    //     }
-    //   )
-    // );
   }, [conversationId]);
 
   let content = null;
@@ -51,9 +40,16 @@ const ChatBody = () => {
         <div className="flex-[1] p-4 border-b-2 border-slate-600 shadow-sm flex justify-between items-center">
           <ChatHead participent={participent} />
         </div>
-        <MessageList conversationId={conversationId as string} />
+        <MessageList
+          conversationId={conversationId as string}
+          setRepliedMessage={setRepliedMessage}
+        />
         {/* text input  */}
-        <ChatInput conversationId={conversationId as string} />
+        <ChatInput
+          conversationId={conversationId as string}
+          setRepliedMessage={setRepliedMessage}
+          repliedMessage={repliedMessage}
+        />
       </>
     );
   }

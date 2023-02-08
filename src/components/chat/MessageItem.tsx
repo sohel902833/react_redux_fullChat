@@ -5,15 +5,17 @@ import { useSelector } from "react-redux";
 import { IAuth } from "../../feature/auth/authSlice";
 import { IMessage } from "../../feature/chat/chat.types";
 import useOutsideClick from "../../hooks/useOutsideClick";
+import ConversationImagesModal from "../home/ConversationImagesModal";
 import RemoveMessageModal from "../home/RemoveMessageModal";
-const image = require("../../assets/images/flower.jpeg");
 interface Props {
   message: IMessage;
+  setRepliedMessage: (message: IMessage) => void;
 }
-const imageLength = 4;
-const MessageItem = ({ message }: Props) => {
+const MessageItem = ({ message, setRepliedMessage }: Props) => {
   const { user } = useSelector((state: { auth: IAuth }) => state.auth);
   const [deleteMessageOpen, setDeleteMessageOpen] = useState(false);
+  const [imageListModal, setImageListModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
   const optionMenuRef = useRef<null | HTMLButtonElement>(null);
   const { open: openOption, handleOpen: handleOptionOpen } =
     useOutsideClick(optionMenuRef);
@@ -23,6 +25,11 @@ const MessageItem = ({ message }: Props) => {
 
   const handleRemoveMessage = () => {
     setDeleteMessageOpen(true);
+  };
+
+  const handleClickImage = (uri: string) => {
+    setSelectedImage(uri);
+    setImageListModal(true);
   };
 
   return (
@@ -48,19 +55,29 @@ const MessageItem = ({ message }: Props) => {
         </div>
         {/* print image grid here  */}
 
-        {/* <div className={`mt-2 grid gap-2 grid-cols-${imageLength>3?'3':imageLength.toString()}`}>
-          {
-          [...new Array(imageLength)].map((item,index)=>(
-            <div> <img key={index} src={image} alt=""/></div>
-          ))
-        }
-        </div> */}
+        {message?.images?.length > 0 && (
+          <div className="flex gap-2 mt-3 flex-wrap ">
+            {message?.images?.map((img) => (
+              <div
+                onClick={() => handleClickImage(img?.url as string)}
+                key={img?._id}
+                className="flex gap-3 items-center grow  bg-slate-500 shadow-sm rounded-md p-2 basis-56 cursor-pointer"
+              >
+                <img src={img?.url} className="h-full w-full object-cover" />
+              </div>
+            ))}
+          </div>
+        )}
+
         <p className="text-white font-semibold mt-3 text-sm">
           {date?.toLocaleDateString()} At {date?.toLocaleTimeString()}
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <button className="bg-slate-500 p-2 rounded-full hover:bg-slate-600 ">
+        <button
+          onClick={() => setRepliedMessage(message)}
+          className="bg-slate-500 p-2 rounded-full hover:bg-slate-600 "
+        >
           <BsFillReplyFill color="white" size={20} />
         </button>
         <button
@@ -90,6 +107,14 @@ const MessageItem = ({ message }: Props) => {
         setOpen={setDeleteMessageOpen}
         isSenderLoggedIn={me}
       />
+      {imageListModal && (
+        <ConversationImagesModal
+          open={imageListModal}
+          setOpen={setImageListModal}
+          images={message?.images}
+          centerImage={selectedImage}
+        />
+      )}
     </div>
   );
 };

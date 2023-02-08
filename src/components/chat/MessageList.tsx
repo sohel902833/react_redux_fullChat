@@ -1,12 +1,14 @@
 import { useEffect, useRef } from "react";
+import { IMessage } from "../../feature/chat/chat.types";
 import { useGetMessagesQuery } from "../../feature/chat/chatApi";
 import EmptyMessage from "./EmptyMessage";
 import MessageItem from "./MessageItem";
 
 interface Props {
   conversationId: string;
+  setRepliedMessage: (message: IMessage) => void;
 }
-const MessageList = ({ conversationId }: Props) => {
+const MessageList = ({ conversationId, setRepliedMessage }: Props) => {
   const { data, isLoading } = useGetMessagesQuery(conversationId);
   const messageEndRef = useRef<HTMLDivElement>(null);
   let content = null;
@@ -24,7 +26,11 @@ const MessageList = ({ conversationId }: Props) => {
     content = (
       <div className="flex-[10] flex-col gap-4 p-3 overflow-auto">
         {data?.messages.map((item, index) => (
-          <MessageItem key={item?._id} message={item} />
+          <MessageItem
+            key={item?._id}
+            message={item}
+            setRepliedMessage={setRepliedMessage}
+          />
         ))}
         <div ref={messageEndRef} className="messageEnd mb-5"></div>
       </div>
