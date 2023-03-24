@@ -10,14 +10,27 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import ChatBody from "./components/chat/ChatBody";
 import { useUserOnlineStatus } from "./hooks/useUserOnlineStatus";
 import usePushNotification from "./hooks/usePushNotification";
+import NewsFeedLayout from "./components/layout/NewsFeedLayout";
+import NewsFeed from "./pages/NewsFeed/NewsFeed";
+import Profile from "./pages/Profile/Profile";
+import BloodDonors from "./pages/dooner/BloodDonors";
+import SpredSheet from "./pages/spredsheet/SpredSheet";
 function App() {
   const {} = useUserOnlineStatus();
   const data = usePushNotification();
   return (
     <Router>
       <Routes>
+        {/* home routes  */}
+        <Route path="/" element={<NewsFeedLayout />}>
+          <Route path="/" element={<NewsFeed />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/donor" element={<BloodDonors />} />
+          <Route path="/spredsheet" element={<SpredSheet />} />
+        </Route>
+        {/* //chating routes  */}
         <Route
-          path="/"
+          path="/chat"
           element={
             <PrivateRoute>
               <Home />

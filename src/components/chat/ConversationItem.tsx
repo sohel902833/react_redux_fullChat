@@ -32,7 +32,7 @@ const ConversationItem = ({ avatar, conversation }: Props) => {
   };
 
   const openConversation = () => {
-    navigate(`/${conversation?._id}`);
+    navigate(`/chat/${conversation?._id}`);
   };
 
   const isActive = () => {
